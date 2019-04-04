@@ -9,6 +9,7 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.MifareUltralight;
 import android.nfc.tech.Ndef;
+import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -63,63 +64,67 @@ public class MainActivity extends AppCompatActivity {
             System.out.print(tech);
             Log.d(TAG, tech);
         }
-
         readNdeftag(tag);
 //        readMifareUltralight(tag);
+
+String action=intent.getAction();
+
+
     }
 
 
-//    public String readMifareUltralight(Tag tag){
-//        MifareUltralight mifare=MifareUltralight.get(tag);
-//        try {
-//            mifare.connect();
-//            byte[] payload=mifare.readPages(4);
-//            return new String(payload, Charset.forName("US-ASCII"));
-//
-//        } catch (IOException e) {
-//             Log.e(TAG, "IOException while reading MifareUltralight message...", e);
-//        } finally {
-//            if (mifare!=null){
-//                try {
-//                    mifare.close();
-//                } catch (IOException e) {
-//                    Log.e(TAG, "Error closing tag...", e);
-//                }
-//            }
-//        }
-//        return null;
-//    }
-
-
-
-
-    private String readNdeftag(Tag tag) {
-        Ndef ndef = Ndef.get(tag);
-        //获取tag的type是第几
-//        String tagType=ndef.getType();
+    public String readMifareUltralight(Tag tag){
+        MifareUltralight mifare=MifareUltralight.get(tag);
         try {
-            ndef.connect();
-            NdefMessage ndefMessage = ndef.getNdefMessage();
-            if (ndefMessage != null) {
-                mReadText.setText(parseTextRecord(ndefMessage.getRecords()[0]));
-                Toast.makeText(this, "成功", Toast.LENGTH_SHORT).show();
-            } else {
-                mReadText.setText("该标签为空标签");
-            }
+            mifare.connect();
+            byte[] payload=mifare.readPages(4);
+            String data= new String(payload, Charset.forName("GB2312"));
+            Log.d(TAG, data);
+
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (FormatException e) {
-            e.printStackTrace();
+             Log.e(TAG, "IOException while reading MifareUltralight message...", e);
         } finally {
-            try {
-                ndef.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (mifare!=null){
+                try {
+                    mifare.close();
+                } catch (IOException e) {
+                    Log.e(TAG, "Error closing tag...", e);
+                }
             }
         }
         return null;
     }
 
+    private String readNdeftag(Tag tag) {
+        Ndef ndef = Ndef.get(tag);
+        if (ndef != null) {
+            //获取tag的type是第几
+//        String tagType=ndef.getType();
+            try {
+                ndef.connect();
+                NdefMessage ndefMessage = ndef.getNdefMessage();
+                if (ndefMessage != null) {
+                    mReadText.setText(parseTextRecord(ndefMessage.getRecords()[0]));
+                    Toast.makeText(this, "成功", Toast.LENGTH_SHORT).show();
+                } else {
+                    mReadText.setText("该标签为空标签");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (FormatException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    ndef.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }else {
+            readMifareUltralight(tag);
+        }
+return  null;
+    }
     public static String parseTextRecord(NdefRecord ndefRecord) {
         //判断TNF
         if (ndefRecord.getTnf() != NdefRecord.TNF_WELL_KNOWN) {
