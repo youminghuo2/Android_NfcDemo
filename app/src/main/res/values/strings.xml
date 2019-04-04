@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">MyNfcDemo</string>
-    <string name="nfcText">这里是nfc标签显示区域</string>
+    <string name="nfc_data_tv">nfc数据：</string>
+    <string name="nfc_id_tv">nfc的序列号：</string>
 </resources>

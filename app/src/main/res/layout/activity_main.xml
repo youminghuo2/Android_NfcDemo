@@ -9,14 +9,45 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp">
-        <TextView
-            android:id="@+id/readBtnView"
-            android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:orientation="vertical">
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textSize="20sp"
+               android:text="@string/nfc_data_tv"/>
+
+           <TextView
+               android:id="@+id/readBtnView"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="这里是nfc数据显示区域"
+               android:textSize="20sp" />
+       </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/nfcText"
-            android:textSize="30sp" />
+           android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="@string/nfc_id_tv"/>
+
+            <TextView
+                android:id="@+id/id_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="nfc的id显示区域"/>
+        </LinearLayout>
     </LinearLayout>
+
 
 
   <LinearLayout
